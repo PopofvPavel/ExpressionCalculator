@@ -8,11 +8,11 @@ import java.util.function.UnaryOperator;
 public class Calculator {
     static Supplier<Calculator> getCalculator = Calculator::new;
 
-    BinaryOperator<Double> plus = (a, b) -> a + b;
-    BinaryOperator<Double> minus = (a, b) -> a - b;
-    BinaryOperator<Double> multiply = (a, b) -> a * b;
-    BinaryOperator<Double> divide = (a, b) -> a / b;
-    UnaryOperator<Double> unaryMinus = a -> -a;
+    public BinaryOperator<Double> plus = (a, b) -> a + b;
+    public BinaryOperator<Double> minus = (a, b) -> a - b;
+    public BinaryOperator<Double> multiply = (a, b) -> a * b;
+    public BinaryOperator<Double> divide = (a, b) -> a / b;
+    public UnaryOperator<Double> unaryMinus = a -> -a;
 
 
     public double calculate(String expression) {
@@ -49,6 +49,9 @@ public class Calculator {
             double firstOperand = Double.parseDouble(tokens[operatorIndex - 1]);
             double secondOperand = Double.parseDouble(tokens[operatorIndex + 1]);
             BinaryOperator<Double> operator = getBinaryOperator(tokens[operatorIndex]);
+            if (operator.getClass() == divide.getClass() && secondOperand == 0) {
+                throw new ArithmeticException("Division by zero");
+            }
             result = (double) operator.apply(firstOperand, secondOperand);
             String[] newTokens = new String[tokens.length - 2];
             System.arraycopy(tokens, 0, newTokens, 0, operatorIndex - 1);
